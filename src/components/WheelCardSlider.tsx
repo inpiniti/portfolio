@@ -22,6 +22,7 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0); // 1=next(right→left), -1=prev(left→right)
   const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
   // refs so the wheel handler always reads fresh state without re-attaching
   const stateRef = useRef({ index: 0, length: slides.length });
   const lastTrigger = useRef(0);
@@ -63,6 +64,23 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
     setIndex(next);
   };
 
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return;
+    const endX = e.changedTouches[0]?.clientX;
+    if (typeof endX !== "number") return;
+
+    const dx = endX - touchStartX.current;
+    touchStartX.current = null;
+
+    if (Math.abs(dx) < 42) return;
+    if (dx < 0 && index < slides.length - 1) navigate(index + 1);
+    if (dx > 0 && index > 0) navigate(index - 1);
+  };
+
   const variants = {
     enter: (d: number) => ({ x: d >= 0 ? 60 : -60, opacity: 0 }),
     center: { x: 0, opacity: 1 },
@@ -72,8 +90,8 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
   return (
     <div ref={containerRef} className="w-full">
       {/* Header row */}
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-xl font-semibold">{heading}</h2>
+      <div className="flex items-center justify-between mb-4 md:mb-5">
+        <h2 className="text-lg md:text-xl font-semibold">{heading}</h2>
         <div className="flex items-center gap-3">
           <button
             onClick={() => index > 0 && navigate(index - 1)}
@@ -105,7 +123,7 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
       </div>
 
       {/* Card area */}
-      <div className="relative overflow-x-hidden">
+      <div className="relative overflow-x-hidden touch-pan-y" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={index}
@@ -122,7 +140,7 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
       </div>
 
       {/* Hint */}
-      <p className="text-[11px] text-muted-foreground mt-4 text-center select-none">
+      <p className="text-[10px] md:text-[11px] text-muted-foreground mt-3 md:mt-4 text-center select-none">
         스크롤 ↕ 로 카드 넘기기 · 마지막 카드에서 스크롤하면 다음 섹션
       </p>
     </div>

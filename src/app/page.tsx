@@ -711,6 +711,47 @@ const projects = {
 };
 
 // ─── 섹션: 기술 ─────────────────────────────────────────
+const frontendSkillsCard = {
+  component: "Card",
+  props: { title: "프론트엔드" },
+  children: [
+    { component: "Progress", props: { label: "React / Vue / Nuxt", value: 95 } },
+    { component: "Progress", props: { label: "TypeScript", value: 85 } },
+    { component: "Progress", props: { label: "Leaflet.js (GIS)", value: 90 } },
+    { component: "Progress", props: { label: "Electron", value: 60 } },
+  ],
+};
+
+const backendSkillsCard = {
+  component: "Card",
+  props: { title: "모바일 / 백엔드" },
+  children: [
+    { component: "Progress", props: { label: "Android (Native/Hybrid)", value: 70 } },
+    { component: "Progress", props: { label: "Node.js / Spring", value: 70 } },
+    { component: "Progress", props: { label: "IoT (MQTT / Mobius)", value: 70 } },
+    { component: "Progress", props: { label: "시계열 예측 / ML", value: 55 } },
+  ],
+};
+
+const toolsEtcCard = {
+  component: "Card",
+  props: { title: "도구 및 기타" },
+  children: [
+    {
+      component: "Stack",
+      props: { direction: "horizontal", gap: "sm" },
+      children: [
+        badge("Zustand / React Query", "default"),
+        badge("Docker / CI/CD"),
+        badge("Git / GitHub"),
+        badge("Oracle / MSSQL", "outline"),
+        badge("Claude Code", "default"),
+        badge("MCP", "outline"),
+      ],
+    },
+  ],
+};
+
 const skills = {
   component: "Stack",
   props: { direction: "vertical", gap: "md" },
@@ -719,49 +760,17 @@ const skills = {
     {
       component: "Grid",
       props: { columns: 2, gap: "md" },
-      children: [
-        {
-          component: "Card",
-          props: { title: "프론트엔드" },
-          children: [
-            { component: "Progress", props: { label: "React / Vue / Nuxt", value: 95 } },
-            { component: "Progress", props: { label: "TypeScript", value: 85 } },
-            { component: "Progress", props: { label: "Leaflet.js (GIS)", value: 90 } },
-            { component: "Progress", props: { label: "Electron", value: 60 } },
-          ],
-        },
-        {
-          component: "Card",
-          props: { title: "모바일 / 백엔드" },
-          children: [
-            { component: "Progress", props: { label: "Android (Native/Hybrid)", value: 70 } },
-            { component: "Progress", props: { label: "Node.js / Spring", value: 70 } },
-            { component: "Progress", props: { label: "IoT (MQTT / Mobius)", value: 70 } },
-            { component: "Progress", props: { label: "시계열 예측 / ML", value: 55 } },
-          ],
-        },
-      ],
+      children: [frontendSkillsCard, backendSkillsCard],
     },
-    {
-      component: "Card",
-      props: { title: "도구 및 기타" },
-      children: [
-        {
-          component: "Stack",
-          props: { direction: "horizontal", gap: "sm" },
-          children: [
-            badge("Zustand / React Query", "default"),
-            badge("Docker / CI/CD"),
-            badge("Git / GitHub"),
-            badge("Oracle / MSSQL", "outline"),
-            badge("Claude Code", "default"),
-            badge("MCP", "outline"),
-          ],
-        },
-      ],
-    },
+    toolsEtcCard,
   ],
 };
+
+const skillsSlides = [
+  frontendSkillsCard,
+  backendSkillsCard,
+  toolsEtcCard,
+];
 
 // ─── 섹션: 연락처 ────────────────────────────────────────
 const contact = {
@@ -881,7 +890,7 @@ export default function Home() {
     <>
       {/* 사이드 내비게이션 도트 */}
       <nav
-        className="fixed left-5 top-1/2 -translate-y-1/2 z-50 flex flex-col items-start gap-4"
+        className="fixed left-5 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col items-start gap-4"
         aria-label="섹션 내비게이션"
       >
         {SECTIONS.map((s, i) => (
@@ -919,7 +928,7 @@ export default function Home() {
             >
               {i === 0 && <div className="absolute inset-0 hero-stripe-bg pointer-events-none" />}
 
-              <div className="max-w-4xl mx-auto px-6 py-16 relative z-10">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-10 sm:py-14 md:py-16 relative z-10">
                 <motion.div
                   initial={{ opacity: 0, x: xInit, y: yInit }}
                   animate={hasSeen ? { opacity: 1, x: 0, y: 0 } : {}}
@@ -936,7 +945,19 @@ export default function Home() {
                       <Renderer registry={registry} spec={toSpec({ component: "Stack", props: { direction: "vertical", gap: "sm" }, children: [gasLinkScreenshotsDialog, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog] } as any)} />
                     </>
                   )}
-                  {s.id !== "experience" && s.id !== "projects" && s.spec && (
+                  {s.id === "skills" && (
+                    <>
+                      <div className="hidden md:block">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        <Renderer registry={registry} spec={toSpec(skills as any)} />
+                      </div>
+                      <div className="md:hidden">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        <WheelCardSlider heading="기술" slides={skillsSlides as any[]} wheelTargetId="skills" />
+                      </div>
+                    </>
+                  )}
+                  {s.id !== "experience" && s.id !== "projects" && s.id !== "skills" && s.spec && (
                     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
                     <Renderer registry={registry} spec={toSpec(s.spec as any)} />
                   )}
