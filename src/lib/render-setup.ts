@@ -5,6 +5,7 @@ import { defineRegistry } from "@json-render/react";
 import { shadcnComponents } from "@json-render/shadcn";
 import { ScrollableDialog } from "@/components/ScrollableDialog";
 import { LinkButton } from "@/components/LinkButton";
+import { GasLinkScreenshots } from "@/components/GasLinkScreenshots";
 
 // 포트폴리오에서 사용할 shadcn 컴포넌트만 명시적으로 선택
 export const catalog = defineCatalog(schema, {
@@ -39,6 +40,7 @@ export const catalog = defineCatalog(schema, {
     Dialog: shadcnComponentDefinitions.Dialog,
     ScrollableDialog: shadcnComponentDefinitions.Dialog, // 동일 props, 스크롤 지원 커스텀 래퍼
     LinkButton: shadcnComponentDefinitions.Link, // href + target 지원 버튼 스타일 링크
+    GasLinkScreenshots: shadcnComponentDefinitions.Separator, // 가스링크 주요화면 갤러리 (정적)
   },
   actions: {},
 });
@@ -69,5 +71,6 @@ export const { registry } = defineRegistry(catalog, {
     Dialog: shadcnComponents.Dialog,
     ScrollableDialog: ScrollableDialog,
     LinkButton: LinkButton,
+    GasLinkScreenshots: GasLinkScreenshots,
   },
 });

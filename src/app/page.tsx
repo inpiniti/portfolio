@@ -134,6 +134,17 @@ const about = {
   ],
 };
 
+// ─── 가스 링크 주요화면 Dialog ────────────────────────────
+const gasLinkScreenshotsDialog = {
+  component: "ScrollableDialog",
+  props: {
+    title: "가스 링크 주요 화면",
+    description: "계량기 인식 · 검침 · 지도 · 점검 · 방문 · 교체 · 체납",
+    openPath: "/gasLinkScreenshotsOpen",
+  },
+  children: [{ component: "GasLinkScreenshots", props: {} }],
+};
+
 // ─── 가스 링크 작업내역 Dialog ────────────────────────────
 const gasLinkWorkDialog = {
   component: "ScrollableDialog",
@@ -517,9 +528,20 @@ const siProjects = {
             text("C언어 PDA 로직을 React로 전면 재구축. Native-Webview 바코드 스캐너 연동, 음영지역 오프라인 저장·자동 재전송 구현. 동접 500명 상용화.", "muted"),
             badgeRow("React.js", "Zustand", "TanStack Query"),
             {
-              component: "Button",
-              props: { label: "작업내역 보기", variant: "secondary" },
-              on: { press: { action: "setState", params: { statePath: "/gasLinkWorkOpen", value: true } } },
+              component: "Stack",
+              props: { direction: "horizontal", gap: "sm" },
+              children: [
+                {
+                  component: "Button",
+                  props: { label: "작업내역 보기", variant: "secondary" },
+                  on: { press: { action: "setState", params: { statePath: "/gasLinkWorkOpen", value: true } } },
+                },
+                {
+                  component: "Button",
+                  props: { label: "주요 화면", variant: "secondary" },
+                  on: { press: { action: "setState", params: { statePath: "/gasLinkScreenshotsOpen", value: true } } },
+                },
+              ],
             },
           ],
         },
@@ -792,7 +814,7 @@ const contact = {
 const portfolioSpec = {
   component: "Stack",
   props: { direction: "vertical", gap: "lg" },
-  children: [hero, sep, about, sep, experience, sep, projects, sep, skills, sep, contact, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog],
+  children: [hero, sep, about, sep, experience, sep, projects, sep, skills, sep, contact, gasLinkScreenshotsDialog, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog],
 };
 
 const spec = toSpec(portfolioSpec);
