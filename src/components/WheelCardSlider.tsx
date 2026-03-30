@@ -12,12 +12,13 @@ type NestedSpec = Record<string, any>;
 interface Props {
   heading: string;
   slides: NestedSpec[];
+  wheelTargetId?: string;
 }
 
 const THROTTLE_MS = 500;
 const ease = [0.215, 0.61, 0.355, 1] as const;
 
-export function WheelCardSlider({ heading, slides }: Props) {
+export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0); // 1=next(right→left), -1=prev(left→right)
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,7 +31,7 @@ export function WheelCardSlider({ heading, slides }: Props) {
   }, [index, slides.length]);
 
   useEffect(() => {
-    const el = containerRef.current;
+    const el = wheelTargetId ? document.getElementById(wheelTargetId) : containerRef.current;
     if (!el) return;
 
     const onWheel = (e: WheelEvent) => {
@@ -104,7 +105,7 @@ export function WheelCardSlider({ heading, slides }: Props) {
       </div>
 
       {/* Card area */}
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-x-hidden">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={index}

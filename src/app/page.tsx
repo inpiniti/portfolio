@@ -825,8 +825,23 @@ const projectsWithDialogs = {
   children: [...(projects.children as any[]), gasLinkScreenshotsDialog, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog],
 };
 
-// 프로젝트 슬라이드: siProjects, smProjects, sideProjects 가 선언된 후 순서대로 정의
-const projectSlides = [siProjects, smProjects, sideProjects];
+const siCards = (((siProjects.children as any[])[1] as { children?: unknown[] })?.children ?? []) as unknown[];
+const smCards = (((smProjects.children as any[])[1] as { children?: unknown[] })?.children ?? []) as unknown[];
+const sideCards = (((sideProjects.children as any[])[1] as { children?: unknown[] })?.children ?? []) as unknown[];
+
+const toCategorySlides = (categoryTitle: string, cards: unknown[]) =>
+  cards.map((card) => ({
+    component: "Stack",
+    props: { direction: "vertical", gap: "sm" },
+    children: [heading(categoryTitle, "h3"), card],
+  }));
+
+// 프로젝트 슬라이드: 카테고리 표기를 유지하면서 카드 1장씩 표시
+const projectSlides = [
+  ...toCategorySlides("🏗 SI (신규 구축)", siCards),
+  ...toCategorySlides("🔧 SM (운영·유지보수)", smCards),
+  ...toCategorySlides("🧩 외주 & 토이 프로젝트", sideCards),
+];
 
 const SECTIONS = [
   { id: "hero",       label: "TOP",      spec: hero,   dir: "up"    },
@@ -911,11 +926,11 @@ export default function Home() {
                   transition={{ duration: 0.75, ease }}
                 >
                   {s.id === "experience" && (
-                    <WheelCardSlider heading="경력" slides={experienceSlides} />
+                    <WheelCardSlider heading="경력" slides={experienceSlides} wheelTargetId="experience" />
                   )}
                   {s.id === "projects" && (
                     <>
-                      <WheelCardSlider heading="프로젝트" slides={projectSlides} />
+                      <WheelCardSlider heading="프로젝트" slides={projectSlides} wheelTargetId="projects" />
                       {/* dialogs: DOM에 존재해야 버튼 트리거 동작 */}
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       <Renderer registry={registry} spec={toSpec({ component: "Stack", props: { direction: "vertical", gap: "sm" }, children: [gasLinkScreenshotsDialog, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog] } as any)} />
