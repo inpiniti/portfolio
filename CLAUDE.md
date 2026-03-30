@@ -19,9 +19,10 @@
    - `<Renderer registry={registry} spec={spec} />`으로 렌더링
 
 3. **새 컴포넌트가 필요할 때**
-   - `src/lib/render-setup.ts`의 catalog와 registry에 먼저 추가
-   - `shadcnComponentDefinitions`에 있는 것을 우선 사용
-   - 없는 경우에만 커스텀 컴포넌트 정의
+   - **반드시** `shadcnComponentDefinitions`에 있는지 먼저 확인 (`node -e "const s = require('@json-render/shadcn/catalog'); console.log(Object.keys(s.shadcnComponentDefinitions))"`)
+   - 카탈로그에 있으면 `src/lib/render-setup.ts`에 추가 후 사용
+   - 카탈로그에 없으면 shadcn/ui 공식 컴포넌트 목록 확인 (`npx shadcn@latest add <component>`)
+   - shadcn/ui에도 없는 경우에만 커스텀 컴포넌트 정의
 
 4. **AI 생성 UI**
    - `src/lib/ai-generate.ts`의 `generateUI(prompt)` 사용
