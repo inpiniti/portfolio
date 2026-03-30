@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import { Renderer } from "@json-render/react";
 import { registry } from "@/lib/render-setup";
 import { toSpec } from "@/lib/nested-to-spec";
@@ -810,19 +812,119 @@ const contact = {
   ],
 };
 
-// ─── 전체 페이지 조합 ────────────────────────────────────
-const portfolioSpec = {
-  component: "Stack",
-  props: { direction: "vertical", gap: "lg" },
-  children: [hero, sep, about, sep, experience, sep, projects, sep, skills, sep, contact, gasLinkScreenshotsDialog, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog],
+// ─── 섹션별 spec (다이얼로그는 해당 섹션에 co-locate) ───
+const projectsWithDialogs = {
+  ...projects,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children: [...(projects.children as any[]), gasLinkScreenshotsDialog, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog],
 };
 
-const spec = toSpec(portfolioSpec);
+const SECTIONS = [
+  { id: "hero",       label: "TOP",      spec: hero,                 dir: "up"    },
+  { id: "about",      label: "소개",     spec: about,                dir: "left"  },
+  { id: "experience", label: "경력",     spec: experience,           dir: "up"    },
+  { id: "projects",   label: "프로젝트", spec: projectsWithDialogs,  dir: "right" },
+  { id: "skills",     label: "기술",     spec: skills,               dir: "up"    },
+  { id: "contact",    label: "연락처",   spec: contact,              dir: "left"  },
+] as const;
+
+const ease = [0.215, 0.61, 0.355, 1] as const;
 
 export default function Home() {
+  const [active, setActive] = useState(0);
+  const [seen,   setSeen]   = useState<Set<number>>(() => new Set([0]));
+  const containerRef        = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const idx = Math.min(Math.round(el.scrollTop / el.clientHeight), SECTIONS.length - 1);
+      setActive(idx);
+      setSeen(prev => prev.has(idx) ? prev : new Set([...prev, idx]));
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const goTo = (i: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollTo({ top: i * el.clientHeight, behavior: "smooth" });
+  };
+
   return (
-    <main className="max-w-4xl mx-auto px-6 py-16">
-      <Renderer registry={registry} spec={spec} />
-    </main>
+    <>
+      {/* 사이드 내비게이션 도트 */}
+      <nav
+        className="fixed left-5 top-1/2 -translate-y-1/2 z-50 flex flex-col items-start gap-4"
+        aria-label="섹션 내비게이션"
+      >
+        {SECTIONS.map((s, i) => (
+          <button key={s.id} onClick={() => goTo(i)} aria-label={s.label} className="group flex items-center gap-2.5 cursor-pointer">
+            <motion.span
+              className="block rounded-full bg-foreground"
+              style={{ width: 7, height: 7 }}
+              animate={{ scale: active === i ? 1.8 : 1, opacity: active === i ? 1 : 0.28 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            />
+            <span className="text-[11px] text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap select-none">
+              {s.label}
+            </span>
+          </button>
+        ))}
+      </nav>
+
+      {/* 풀스크린 세로 스냅 컨테이너 */}
+      <div
+        ref={containerRef}
+        className="fixed inset-0 overflow-y-scroll scrollbar-none"
+        style={{ scrollSnapType: "y mandatory" }}
+      >
+        {SECTIONS.map((s, i) => {
+          const hasSeen = seen.has(i);
+          const xInit   = s.dir === "left" ? -80 : s.dir === "right" ? 80 : 0;
+          const yInit   = s.dir === "up"   ? 60  : 0;
+
+          return (
+            <div
+              key={s.id}
+              id={s.id}
+              className="h-screen overflow-y-auto relative"
+              style={{ scrollSnapAlign: "start" }}
+            >
+              {i === 0 && <div className="absolute inset-0 hero-stripe-bg pointer-events-none" />}
+
+              <div className="max-w-4xl mx-auto px-6 py-16 relative z-10">
+                <motion.div
+                  initial={{ opacity: 0, x: xInit, y: yInit }}
+                  animate={hasSeen ? { opacity: 1, x: 0, y: 0 } : {}}
+                  transition={{ duration: 0.75, ease }}
+                >
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  <Renderer registry={registry} spec={toSpec(s.spec as any)} />
+                </motion.div>
+              </div>
+
+              {i === 0 && (
+                <motion.div
+                  className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-muted-foreground"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={hasSeen ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.6, delay: 0.9, ease }}
+                >
+                  <span className="text-[10px] tracking-widest uppercase">Scroll</span>
+                  <motion.span
+                    className="text-lg"
+                    animate={{ y: [0, 4, 0] }}
+                    transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                  >↓</motion.span>
+                </motion.div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 }
