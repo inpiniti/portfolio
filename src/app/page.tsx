@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Renderer } from "@json-render/react";
 import { registry } from "@/lib/render-setup";
 import { toSpec } from "@/lib/nested-to-spec";
+import { CoverFlow, type CoverFlowItem } from "@/components/CoverFlow";
 
 // ─── 헬퍼 ───────────────────────────────────────────────
 const heading = (text: string, level: "h1" | "h2" | "h3" = "h2") => ({
@@ -315,7 +316,142 @@ const experience = {
   ],
 };
 
+// ─── CoverFlow 데이터: 경력 ──────────────────────────────
+const experienceItems: CoverFlowItem[] = [
+  {
+    id: "grm",
+    color: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+    emoji: "🔥",
+    title: "GRM · 운영1팀",
+    subtitle: "서울도시가스 자회사 · 정규직 · 2024.11.18 ~ 현재",
+    tags: ["React.js", "Zustand", "TanStack Query"],
+    body: "가스 링크 (1, 2차) — C언어 기반 PDA 로직을 분석하여 점검·검침·계량기 교체·체납 관리 기능을 React로 전면 재구축. 프론트엔드 자원 부재 상황에서 1년 만에 전 모듈 구축 및 상용화(동접 500명).",
+  },
+  {
+    id: "ecomarine",
+    color: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+    emoji: "🌊",
+    title: "에코마린 · 개발팀",
+    subtitle: "정규직 · 2023.08.21 ~ 2024.11.14",
+    tags: ["Nuxt.js", "Leaflet.js", "Docker", "CI/CD"],
+    body: "OceanLook 구축 및 고도화 — Nuxt.js 버전 업그레이드(2.0→3.0) 주도, 자체 타일 서버 구축으로 지도 API 비용 100% 절감. CI/CD 자동화로 배포 시간 50% 단축.",
+  },
+  {
+    id: "iocode",
+    color: "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
+    emoji: "⚙️",
+    title: "아이오코드 · 개발팀",
+    subtitle: "정규직 · 2021.08.02 ~ 2023.08.19",
+    tags: ["Vue.js", "Node.js", "Mobius", "MQTT", "AAS"],
+    body: "IoT 기반 지능형 항만물류 기술 개발, 스마트제조혁신기술개발사업, 프로세스 마이닝 분석 플랫폼 'IPR ENT' 고도화.",
+  },
+  {
+    id: "cyberimag",
+    color: "linear-gradient(135deg, #1f1c2c 0%, #928dab 100%)",
+    emoji: "📊",
+    title: "사이버이메지네이션 · 개발팀",
+    subtitle: "정규직 · 2018.01.02 ~ 2021.07.24",
+    tags: ["Electron", "Node.js", "Java", "Oracle"],
+    body: "대신증권 마이데이터 표준 API 시스템 구축, 한국거래소(KRX) 대용량 다운로드 센터 구축, KRX 홈페이지 유지보수 및 운영.",
+  },
+  {
+    id: "onware",
+    color: "linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)",
+    emoji: "👕",
+    title: "온웨어 · 개발팀",
+    subtitle: "정규직 · 2015.02.05 ~ 2017.12.01",
+    tags: ["Android", "Spring Framework", "MSSQL"],
+    body: "O2O 세탁 서비스 플랫폼 안드로이드 앱 개발, 한국동서발전소 '북카페' Full-Stack 개발(DB 설계부터 앱·키오스크까지 1인 수행).",
+  },
+];
+
+// ─── CoverFlow 데이터: 프로젝트 ──────────────────────────
+const projectItems: CoverFlowItem[] = [
+  {
+    id: "gaslink",
+    color: "linear-gradient(135deg, #0f3460 0%, #533483 100%)",
+    emoji: "🔧",
+    title: "가스 링크 (GRM · 서울도시가스)",
+    subtitle: "2024.11.18 ~ 2026.01.27 · SI 신규 구축",
+    tags: ["React.js", "Zustand", "TanStack Query"],
+    body: "C언어 PDA 로직을 React로 전면 재구축. Native-Webview 바코드 연동, 오프라인 저장·자동 재전송. 동접 500명 상용화.",
+  },
+  {
+    id: "oceanlook",
+    color: "linear-gradient(135deg, #005c97 0%, #363795 100%)",
+    emoji: "🛳️",
+    title: "OceanLook (에코마린)",
+    subtitle: "2023.08.21 ~ 2024.11.14 · SI 신규 구축",
+    tags: ["Nuxt.js", "Leaflet.js", "Docker", "CI/CD"],
+    body: "수만 척 선박 실시간 해양 관제. Nuxt 2→3 마이그레이션, 자체 타일 서버(API 비용 100% 절감), Viewport 필터링·클러스터링.",
+  },
+  {
+    id: "iot-harbor",
+    color: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
+    emoji: "🚢",
+    title: "IoT 항만물류 플랫폼",
+    subtitle: "2022.09 ~ 2023.04 · SI 신규 구축",
+    tags: ["Node.js", "Mobius", "MQTT"],
+    body: "5초 주기 센서 데이터 실시간 수집·알림. Mobius(oneM2M) 플랫폼 활용 대용량 IoT 파이프라인 구축.",
+  },
+  {
+    id: "mydata",
+    color: "linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%)",
+    emoji: "🏦",
+    title: "대신증권 마이데이터 API",
+    subtitle: "2021.01 ~ 2021.07 · SI 신규 구축",
+    tags: ["Java", "D-Bridge", "OpenAPI"],
+    body: "금융보안원 테스트베드 통과. 마이데이터 표준 규격 엄수 및 무결점 API 서비스 제공.",
+  },
+  {
+    id: "krx-download",
+    color: "linear-gradient(135deg, #1a1a2e 0%, #e94560 100%)",
+    emoji: "📥",
+    title: "KRX 대용량 다운로드 센터",
+    subtitle: "2020.06 ~ 2020.07 · SI 신규 구축",
+    tags: ["Electron", "Node.js", "Vanilla JS"],
+    body: "한국거래소 전용 대용량 파일 전송 앱. 이어받기·순차 다운로드 대기열, 네트워크 단절 시 데이터 무결성 보장.",
+  },
+  {
+    id: "bookcafe",
+    color: "linear-gradient(135deg, #8e44ad 0%, #3498db 100%)",
+    emoji: "📚",
+    title: "북카페 (한국동서발전소)",
+    subtitle: "2015.03 ~ 2016.08 · SI 신규 구축",
+    tags: ["Android", "Spring", "MSSQL"],
+    body: "도서 대여 자동화 키오스크. DB 설계·서버·앱·키오스크까지 1인 Full-Stack, RFID·바코드·네이버 API 연동.",
+  },
+  {
+    id: "fms",
+    color: "linear-gradient(135deg, #2d3436 0%, #636e72 100%)",
+    emoji: "🏗️",
+    title: "FMS (서울도시가스)",
+    subtitle: "2026.01 ~ 현재 · SM 운영·유지보수",
+    tags: ["bizMOB", "SQLite", "Hybrid App", "OZ Report"],
+    body: "모바일 현장관리 시스템. 대용량계량기·조정기·시설전·자산실사 모듈 유지보수, OZ 리포트 연동.",
+  },
+  {
+    id: "bitcoin",
+    color: "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)",
+    emoji: "₿",
+    title: "비트코인 시뮬레이션",
+    subtitle: "2024 ~ 현재 · 토이 프로젝트",
+    tags: ["Next.js", "FastAPI", "XGBoost"],
+    body: "XGBoost·딥러닝으로 가격 예측, 실시간 차트와 백테스팅. KIS API 자동매매·카카오 리포트 발송 연동.",
+  },
+  {
+    id: "silverhugg",
+    color: "linear-gradient(135deg, #56ab2f 0%, #a8e063 100%)",
+    emoji: "👴",
+    title: "실버허그",
+    subtitle: "2022.12 ~ 2023.01 · 외주",
+    tags: ["Electron", "Nextron", "Material UI"],
+    body: "노인정 일정·Live 강의 접속 윈도우 앱. 어르신 맞춤 UX, cheerio 크롤링 + Electron 윈도우 앱으로 구현.",
+  },
+];
+
 // ─── FMS 작업내역 Dialog ──────────────────────────────────
+
 const fmsWorkDialog = {
   component: "ScrollableDialog",
   props: {
@@ -820,13 +956,13 @@ const projectsWithDialogs = {
 };
 
 const SECTIONS = [
-  { id: "hero",       label: "TOP",      spec: hero,                 dir: "up"    },
-  { id: "about",      label: "소개",     spec: about,                dir: "left"  },
-  { id: "experience", label: "경력",     spec: experience,           dir: "up"    },
-  { id: "projects",   label: "프로젝트", spec: projectsWithDialogs,  dir: "right" },
-  { id: "skills",     label: "기술",     spec: skills,               dir: "up"    },
-  { id: "contact",    label: "연락처",   spec: contact,              dir: "left"  },
-] as const;
+  { id: "hero",       label: "TOP",      spec: hero,                dir: "up"    as const, node: null },
+  { id: "about",      label: "소개",     spec: about,               dir: "left"  as const, node: null },
+  { id: "experience", label: "경력",     spec: null,                dir: "up"    as const, node: "experience" as const },
+  { id: "projects",   label: "프로젝트", spec: null,                dir: "right" as const, node: "projects"   as const },
+  { id: "skills",     label: "기술",     spec: skills,              dir: "up"    as const, node: null },
+  { id: "contact",    label: "연락처",   spec: contact,             dir: "left"  as const, node: null },
+];
 
 const ease = [0.215, 0.61, 0.355, 1] as const;
 
@@ -901,8 +1037,23 @@ export default function Home() {
                   animate={hasSeen ? { opacity: 1, x: 0, y: 0 } : {}}
                   transition={{ duration: 0.75, ease }}
                 >
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  <Renderer registry={registry} spec={toSpec(s.spec as any)} />
+                  {s.node === "experience" && (
+                    <>
+                      <CoverFlow items={experienceItems} heading="경력" />
+                    </>
+                  )}
+                  {s.node === "projects" && (
+                    <>
+                      <CoverFlow items={projectItems} heading="프로젝트" />
+                      {/* dialogs co-located */}
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <Renderer registry={registry} spec={toSpec({ component: "Stack", props: { direction: "vertical", gap: "sm" }, children: [gasLinkScreenshotsDialog, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog] } as any)} />
+                    </>
+                  )}
+                  {!s.node && s.spec && (
+                    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                    <Renderer registry={registry} spec={toSpec(s.spec as any)} />
+                  )}
                 </motion.div>
               </div>
 
