@@ -302,6 +302,72 @@ const experience = {
   ],
 };
 
+// ─── FMS 작업내역 Dialog ──────────────────────────────────
+const fmsWorkDialog = {
+  component: "ScrollableDialog",
+  props: {
+    title: "FMS 작업 내역",
+    description: "2026.01 ~ 현재 · 서울도시가스 모바일 현장관리 시스템 · Git 커밋 기반",
+    openPath: "/fmsWorkOpen",
+  },
+  children: [
+    {
+      component: "Stack",
+      props: { direction: "vertical", gap: "lg", align: "stretch" },
+      children: [
+        ...[
+          {
+            title: "대용량 계량기 교체",
+            lines: [
+              "• 교체 리스트 렌더링 속도 최적화",
+              "• 지침 비교 오류 수정",
+              "• 교체구분 '기타' 선택 시 기타부품 입력 활성화 (숫자만 허용)",
+              "• 지침 콤마 표시 함수 누락 수정",
+              "• 코드 최적화 및 컨트롤 활성화 조건 수정",
+            ],
+          },
+          {
+            title: "시설전 (계량기 등록)",
+            lines: [
+              "• 유효년월 항목 추가",
+              "• 유효년도 기간 변경",
+              "• 같은 건물 계량기의 경우 유효년월 디폴트 자동 설정",
+              "• 유효년월 필수값으로 지정",
+              "• 목록에서 조정기 등록 관련 불필요 메시지 비표시 처리",
+            ],
+          },
+          {
+            title: "조정기 계획교체",
+            lines: [
+              "• 안전일지 작성 실패 시 오류코드 표시",
+            ],
+          },
+          {
+            title: "공통 / 기타",
+            lines: [
+              "• 조정기 개요화면 지번주소 village 항목 추가",
+              "• 사진대장 OZ 리포트에서 사진 미표시 현상 수정 (공개 외부 저장소 경로 전달)",
+              "• 파일 존재 여부 확인 및 에러 처리 추가",
+              "• 개발자 모드 추가",
+              "• 7-Zip 경로 탐색 및 오류 처리 포함한 배포 스크립트 개선",
+            ],
+          },
+        ].map(({ title, lines }) => ({
+          component: "Collapsible",
+          props: { title },
+          children: [
+            {
+              component: "Stack",
+              props: { direction: "vertical", gap: "sm", align: "stretch" },
+              children: lines.map((l) => text(l, "muted")),
+            },
+          ],
+        })),
+      ],
+    },
+  ],
+};
+
 // ─── 비트코인 시뮬레이션 작업내역 Dialog ──────────────────
 const bitcoinWorkDialog = {
   component: "ScrollableDialog",
@@ -514,6 +580,20 @@ const smProjects = {
       component: "Grid",
       props: { columns: 2, gap: "md" },
       children: [
+        {
+          component: "Card",
+          props: { title: "FMS (서울도시가스)", description: "모바일 현장관리 시스템 운영·유지보수" },
+          children: [
+            text("2026.01 ~ 현재", "caption"),
+            text("bizMOB 기반 하이브리드 앱. 대용량계량기·조정기계획교체·시설전·자산실사 모듈 유지보수. OZ 리포트 연동 및 SQLite 로컬 DB 관리.", "muted"),
+            badgeRow("bizMOB", "SQLite", "Hybrid App", "OZ Report"),
+            {
+              component: "Button",
+              props: { label: "작업내역 보기", variant: "secondary" },
+              on: { press: { action: "setState", params: { statePath: "/fmsWorkOpen", value: true } } },
+            },
+          ],
+        },
         projectCard(
           "KRX 홈페이지 운영",
           "2018.01.02 ~ 2019.12.31",
@@ -712,7 +792,7 @@ const contact = {
 const portfolioSpec = {
   component: "Stack",
   props: { direction: "vertical", gap: "lg" },
-  children: [hero, sep, about, sep, experience, sep, projects, sep, skills, sep, contact, gasLinkWorkDialog, bitcoinWorkDialog],
+  children: [hero, sep, about, sep, experience, sep, projects, sep, skills, sep, contact, gasLinkWorkDialog, fmsWorkDialog, bitcoinWorkDialog],
 };
 
 const spec = toSpec(portfolioSpec);
