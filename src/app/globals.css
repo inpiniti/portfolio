@@ -2,6 +2,12 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* json-render/shadcn 번들 내 Tailwind 클래스 스캔 포함 */
+@source "../../node_modules/@json-render/shadcn/dist/*.js";
+@source "../../node_modules/@json-render/shadcn/dist/*.mjs";
+@source "../../node_modules/@json-render/react/dist/*.js";
+@source "../../node_modules/@json-render/react/dist/*.mjs";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
