@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useRef, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Renderer } from "@json-render/react";
-import { registry } from "@/lib/render-setup";
-import { toSpec } from "@/lib/nested-to-spec";
+import { useRef, useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Renderer } from '@json-render/react';
+import { registry } from '@/lib/render-setup';
+import { toSpec } from '@/lib/nested-to-spec';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type NestedSpec = Record<string, any>;
@@ -32,7 +32,9 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
   }, [index, slides.length]);
 
   useEffect(() => {
-    const el = wheelTargetId ? document.getElementById(wheelTargetId) : containerRef.current;
+    const el = wheelTargetId
+      ? document.getElementById(wheelTargetId)
+      : containerRef.current;
     if (!el) return;
 
     const onWheel = (e: WheelEvent) => {
@@ -55,8 +57,8 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
       setIndex(cur + dir);
     };
 
-    el.addEventListener("wheel", onWheel, { passive: false });
-    return () => el.removeEventListener("wheel", onWheel);
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
   }, []); // empty deps — state accessed via ref
 
   const navigate = (next: number) => {
@@ -71,7 +73,7 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
   const onTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     if (touchStartX.current === null) return;
     const endX = e.changedTouches[0]?.clientX;
-    if (typeof endX !== "number") return;
+    if (typeof endX !== 'number') return;
 
     const dx = endX - touchStartX.current;
     touchStartX.current = null;
@@ -84,7 +86,7 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
   const variants = {
     enter: (d: number) => ({ x: d >= 0 ? 60 : -60, opacity: 0 }),
     center: { x: 0, opacity: 1 },
-    exit:  (d: number) => ({ x: d >= 0 ? -60 : 60, opacity: 0 }),
+    exit: (d: number) => ({ x: d >= 0 ? -60 : 60, opacity: 0 }),
   };
 
   return (
@@ -98,24 +100,41 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
             disabled={index === 0}
             aria-label="이전"
             className="text-muted-foreground hover:text-foreground transition-colors disabled:opacity-20 cursor-pointer text-xl leading-none px-1"
-          >‹</button>
-          <span className="text-xs text-muted-foreground tabular-nums">{index + 1} / {slides.length}</span>
+          >
+            ‹
+          </button>
+          <span className="text-xs text-muted-foreground tabular-nums">
+            {index + 1} / {slides.length}
+          </span>
           <button
             onClick={() => index < slides.length - 1 && navigate(index + 1)}
             disabled={index === slides.length - 1}
             aria-label="다음"
             className="text-muted-foreground hover:text-foreground transition-colors disabled:opacity-20 cursor-pointer text-xl leading-none px-1"
-          >›</button>
+          >
+            ›
+          </button>
         </div>
       </div>
 
       {/* Progress dots */}
       <div className="flex gap-1.5 mb-5" role="tablist">
         {slides.map((_, i) => (
-          <button key={i} role="tab" aria-selected={i === index} aria-label={`${i + 1}번`} onClick={() => navigate(i)} className="cursor-pointer">
+          <button
+            key={i}
+            role="tab"
+            aria-selected={i === index}
+            aria-label={`${i + 1}번`}
+            onClick={() => navigate(i)}
+            className="cursor-pointer"
+          >
             <motion.span
               className="block rounded-full bg-foreground"
-              animate={{ width: i === index ? 16 : 6, height: 6, opacity: i === index ? 1 : 0.25 }}
+              animate={{
+                width: i === index ? 16 : 6,
+                height: 6,
+                opacity: i === index ? 1 : 0.25,
+              }}
               transition={{ duration: 0.2 }}
             />
           </button>
@@ -123,7 +142,11 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
       </div>
 
       {/* Card area */}
-      <div className="relative overflow-x-hidden touch-pan-y" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div
+        className="relative overflow-x-hidden touch-pan-y"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={index}
@@ -134,7 +157,10 @@ export function WheelCardSlider({ heading, slides, wheelTargetId }: Props) {
             exit="exit"
             transition={{ duration: 0.35, ease }}
           >
-            <Renderer registry={registry} spec={toSpec(slides[index] as Parameters<typeof toSpec>[0])} />
+            <Renderer
+              registry={registry}
+              spec={toSpec(slides[index] as Parameters<typeof toSpec>[0])}
+            />
           </motion.div>
         </AnimatePresence>
       </div>
