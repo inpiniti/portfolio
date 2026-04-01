@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { ScheduleScreen } from '@/components/ScheduleScreen';
 import {
   animate,
   AnimatePresence,
@@ -25,8 +26,6 @@ type View =
   | 'career'
   | 'freelance'
   | 'about'
-  | 'skills'
-  | 'contact'
   | 'schedule';
 
 type CompanyKey = 'onware' | 'cyberi' | 'iocode' | 'ecomarine' | 'grm';
@@ -38,8 +37,6 @@ const NAV: { id: View; label: string }[] = [
   { id: 'career', label: '경력' },
   { id: 'freelance', label: '외주' },
   { id: 'about', label: '소개' },
-  { id: 'skills', label: '보유기술' },
-  { id: 'contact', label: '연락처' },
   { id: 'schedule', label: '스케줄' },
 ];
 
@@ -1431,8 +1428,6 @@ function SimpleScreen({ view, onBack }: { view: View; onBack: () => void }) {
   const LABELS: Partial<Record<View, string>> = {
     freelance: '외주',
     about: '소개',
-    skills: '보유기술',
-    contact: '연락처',
     schedule: '스케줄',
   };
 
@@ -1591,6 +1586,8 @@ export default function Page() {
     }
 
     if (view === 'about') return <AboutScreen onBack={goBack} />;
+
+    if (view === 'schedule') return <ScheduleScreen onBack={goBack} />;
 
     return <SimpleScreen view={view} onBack={goBack} />;
   };
