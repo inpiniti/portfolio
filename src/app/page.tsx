@@ -397,7 +397,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.08, duration: 0.5, ease: [0.34, 1.2, 0.64, 1] }}
       onClick={onClick}
-      className="absolute top-8 left-8 flex items-center gap-1.5 cursor-pointer select-none group focus:outline-none"
+      className="absolute top-8 left-8 z-20 flex items-center gap-1.5 cursor-pointer select-none group focus:outline-none"
     >
       <span className="text-base leading-none text-black/20 group-hover:text-black transition-colors duration-200">
         ‹
@@ -1375,7 +1375,7 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
     <div className="relative w-full h-full overflow-hidden">
       {/* 전체화면 3D 캔버스 */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.8 }}
