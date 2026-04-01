@@ -19,6 +19,14 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
+  openGraph: {
+    title: "포트폴리오 | 정영균",
+    description: "프론트엔드 개발자 정영균의 포트폴리오 사이트입니다.",
+    url: "https://inpiniti-portfolio.vercel.app",
+    siteName: "정영균 포트폴리오",
+    locale: "ko_KR",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
