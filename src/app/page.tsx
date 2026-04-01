@@ -1483,31 +1483,37 @@ export default function Page() {
   const [dir, setDir] = useState<1 | -1>(1);
 
   const navigate = (v: View) => {
+    history.pushState(null, '');
     setDir(1);
     setView(v);
   };
 
   const openCompany = (k: CompanyKey) => {
+    history.pushState(null, '');
     setDir(1);
     setCompany(k);
   };
 
   const openProject = (projectId: string) => {
+    history.pushState(null, '');
     setDir(1);
     setProject(projectId);
   };
 
   const openUniv = () => {
+    history.pushState(null, '');
     setDir(1);
     setUnivOpen(true);
   };
 
   const openFreelanceItem = (key: FreelanceKey) => {
+    history.pushState(null, '');
     setDir(1);
     setFreelanceItem(key);
   };
 
-  const goBack = () => {
+  // 상태 복원 로직 (UI 버튼 & 브라우저 뒤로가기 공유)
+  const applyBack = useCallback(() => {
     setDir(-1);
     if (project) {
       setProject(null);
@@ -1520,6 +1526,17 @@ export default function Page() {
     } else {
       setView('home');
     }
+  }, [project, company, univOpen, freelanceItem]);
+
+  // 브라우저 뒤로가기 버튼 → applyBack
+  useEffect(() => {
+    const onPop = () => applyBack();
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, [applyBack]);
+
+  const goBack = () => {
+    history.back(); // popstate 발생 → applyBack 호출
   };
 
   const screenKey = project
