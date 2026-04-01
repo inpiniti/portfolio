@@ -63,7 +63,7 @@ export function RobotWalking() {
   return (
     <Canvas
       camera={{ position: [0, 2, 14], fov: 36 }}
-      style={{ background: 'transparent', width: '100%', height: '100%' }}
+      style={{ background: 'transparent', width: '100%', height: '100%', pointerEvents: 'none' }}
       gl={{ alpha: true, antialias: true }}
     >
       <CameraRig />
