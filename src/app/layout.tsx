@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "포트폴리오 | 개발자 김인피니티",
-  description: "풀스택 개발자 김인피니티의 포트폴리오 사이트입니다.",
+  title: "포트폴리오 | 정영균",
+  description: "프론트엔드 개발자 정영균의 포트폴리오 사이트입니다.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
