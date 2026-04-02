@@ -18,6 +18,11 @@ const RobotWalking = dynamic(
   { ssr: false, loading: () => <div className="w-full h-full" /> },
 );
 
+const DrumCarousel = dynamic(
+  () => import('@/components/DrumCarousel').then((m) => m.DrumCarousel),
+  { ssr: false },
+);
+
 /* ═══════════════════════════════════════════════════
    Types
 ═══════════════════════════════════════════════════ */
@@ -922,7 +927,7 @@ function CompanyScreen({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.55 }}
       >
-        <DragCarousel projects={company.projects} onSelect={onProject} />
+        <DrumCarousel projects={company.projects} onSelect={onProject} />
       </motion.div>
 
       <motion.p
@@ -931,7 +936,7 @@ function CompanyScreen({
         transition={{ delay: 1.0, duration: 0.6 }}
         className="text-[0.48rem] tracking-[0.3em] text-black/16"
       >
-        드래그로 프로젝트를 탐색하세요
+        드래그로 탐색 · 탭하면 상세보기
       </motion.p>
     </div>
   );
