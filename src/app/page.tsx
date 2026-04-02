@@ -23,6 +23,11 @@ const DrumCarousel = dynamic(
   { ssr: false },
 );
 
+const BookCafeDemo = dynamic(
+  () => import('@/components/BookCafeDemo').then((m) => m.BookCafeDemo),
+  { ssr: false },
+);
+
 /* ═══════════════════════════════════════════════════
    Types
 ═══════════════════════════════════════════════════ */
@@ -1553,6 +1558,7 @@ export default function Page() {
     if (view === 'home') return <HomeScreen onNav={navigate} />;
 
     if (project && company) {
+      if (project === 'o2') return <BookCafeDemo onBack={goBack} />;
       const proj = COMPANIES[company].projects.find((p) => p.id === project);
       if (proj)
         return (

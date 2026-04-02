@@ -3,16 +3,104 @@
 @import "shadcn/tailwind.css";
 @import "@dayflow/core/dist/styles.components.css";
 
-/* DayFlow calendar fills its container */
-.schedule-calendar-wrap .df-calendar-container {
-  height: 100% !important;
-}
-
 /* json-render/shadcn 번들 내 Tailwind 클래스 스캔 포함 */
 @source "../../node_modules/@json-render/shadcn/dist/*.js";
 @source "../../node_modules/@json-render/shadcn/dist/*.mjs";
 @source "../../node_modules/@json-render/react/dist/*.js";
 @source "../../node_modules/@json-render/react/dist/*.mjs";
+
+/* DayFlow 내부 Tailwind 클래스 스캔 (flex-3, col-span-2, z-9999 등 비표준 클래스 포함) */
+@source "../../node_modules/@dayflow/core/dist/index.esm.js";
+@source "../../node_modules/@dayflow/react/dist/index.esm.js";
+@source "../../node_modules/@dayflow/plugin-sidebar/dist/index.esm.js";
+
+/* DayFlow calendar - 포트폴리오 스타일에 맞게 오버라이드 */
+.schedule-calendar-wrap .df-calendar-container {
+  height: 100% !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+
+/* 사이드바 배경 통일 */
+.schedule-calendar-wrap .df-calendar-container .df-sidebar {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+/* 헤더 배경 통일 */
+.schedule-calendar-wrap .df-calendar-container .df-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+/* 셀 테두리 색상 포트폴리오 스타일로 */
+.schedule-calendar-wrap .df-calendar-container .df-month-day-cell,
+.schedule-calendar-wrap .df-calendar-container .df-time-grid-cell,
+.schedule-calendar-wrap .df-calendar-container .df-all-day-cell,
+.schedule-calendar-wrap .df-calendar-container .df-time-column,
+.schedule-calendar-wrap .df-calendar-container .df-time-grid-row,
+.schedule-calendar-wrap .df-calendar-container .df-time-grid-boundary,
+.schedule-calendar-wrap .df-calendar-container .df-all-day-row,
+.schedule-calendar-wrap .df-calendar-container .df-mini-calendar,
+.schedule-calendar-wrap .df-calendar-container .df-week-header-row,
+.schedule-calendar-wrap .df-calendar-container .df-week-header {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ── DayFlow 레이아웃 수정 ── */
+
+/* 월 뷰: month-view-factory는 Tailwind 클래스 없이 쓰여서 height/display 직접 지정 */
+.schedule-calendar-wrap .month-view-factory {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+.schedule-calendar-wrap .month-view-factory > * {
+  min-height: 0;
+}
+
+/* 년 뷰: year grid 컨테이너 스크롤 활성화 */
+.schedule-calendar-wrap .year-view-factory {
+  height: 100%;
+  overflow-y: auto;
+  min-height: 0;
+}
+.schedule-calendar-wrap .year-view-factory > * {
+  min-height: 0;
+}
+
+/* Week/Day 뷰: flex 체인 min-height 수정 → 시간 그리드 스크롤 작동 */
+.schedule-calendar-wrap .df-calendar {
+  min-height: 0 !important;
+}
+.schedule-calendar-wrap .df-calendar > div {
+  min-height: 0;
+}
+.schedule-calendar-wrap .df-calendar > div > div {
+  min-height: 0;
+}
+
+/* 시간 그리드 스크롤 컨테이너 */
+.schedule-calendar-wrap .df-calendar-content {
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+.schedule-calendar-wrap .df-day-time-grid {
+  min-height: 0 !important;
+  overflow-y: auto !important;
+}
+
+/* Day 뷰 루트 */
+.schedule-calendar-wrap .df-day-view {
+  min-height: 0;
+  overflow: hidden;
+}
+.schedule-calendar-wrap .df-day-view > div {
+  min-height: 0;
+}
 
 @custom-variant dark (&:is(.dark *));
 
