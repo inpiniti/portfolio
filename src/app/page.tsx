@@ -58,6 +58,21 @@ const MyDataApiDemo = dynamic(
   { ssr: false },
 );
 
+const WebPonentChartDemo = dynamic(
+  () => import('@/components/WebPonentChartDemo').then((m) => m.WebPonentChartDemo),
+  { ssr: false },
+);
+
+const GroupwareDemo = dynamic(
+  () => import('@/components/GroupwareDemo').then((m) => m.GroupwareDemo),
+  { ssr: false },
+);
+
+const IprDemo = dynamic(
+  () => import('@/components/IprDemo').then((m) => m.IprDemo),
+  { ssr: false },
+);
+
 /* ═══════════════════════════════════════════════════
    Types
 ═══════════════════════════════════════════════════ */
@@ -1732,10 +1747,15 @@ export default function Page() {
     if (view === 'home') return <HomeScreen onNav={navigate} />;
 
     if (project && company) {
+      if (project === 'o1')  return <BookCafeDemo onBack={goBack} />;
       if (project === 'o2')  return <BookCafeDemo onBack={goBack} />;
       if (project === 'c1')  return <MyDataApiDemo onBack={goBack} />;
       if (project === 'c2')  return <KrxDownloadDemo onBack={goBack} />;
       if (project === 'c3')  return <KrxSiteDemo onBack={goBack} />;
+      if (project === 'c4')  return <WebPonentChartDemo onBack={goBack} />;
+      if (project === 'c5')  return <GroupwareDemo onBack={goBack} />;
+      if (project === 'i3')  return <IprDemo onBack={goBack} />;
+      if (project === 'i5')  return <IprDemo onBack={goBack} />;
       const proj = COMPANIES[company].projects.find((p) => p.id === project);
       if (proj)
         return (
