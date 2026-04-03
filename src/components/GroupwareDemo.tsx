@@ -88,23 +88,29 @@ export function GroupwareDemo({ onBack }: { onBack: () => void }) {
           transition={{ delay: 0.2, duration: 0.5 }}
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
-          {/* Monitor bezel */}
-          <div style={{ background: '#2c2c2e', borderRadius: 10, padding: 6, boxShadow: '0 6px 24px rgba(0,0,0,0.28)' }}>
-            {/* Phone shell */}
-            <div style={{
-              width: 240,
-              height: 420,
-              background: '#1a1a1a',
-              borderRadius: 20,
-              padding: 6,
-              display: 'flex',
-              flexDirection: 'column',
-            }}>
-              {/* Phone screen */}
+          {/* Phone shell */}
+          <div style={{
+            position: 'relative',
+            background: 'linear-gradient(160deg, #2a2a2a 0%, #1a1a1a 100%)',
+            borderRadius: 40,
+            padding: '14px 10px',
+            boxShadow: '0 0 0 1.5px #3a3a3a, 0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.08)',
+          }}>
+            {/* Dynamic Island */}
+            <div style={{ position:'absolute', top:18, left:'50%', transform:'translateX(-50%)', width:58, height:13, background:'#000', borderRadius:10, zIndex:10 }} />
+            {/* Power button */}
+            <div style={{ position:'absolute', right:-3, top:90, width:3, height:36, background:'#2a2a2a', borderRadius:'0 3px 3px 0' }} />
+            {/* Volume buttons */}
+            <div style={{ position:'absolute', left:-3, top:68, width:3, height:22, background:'#2a2a2a', borderRadius:'3px 0 0 3px' }} />
+            <div style={{ position:'absolute', left:-3, top:98, width:3, height:22, background:'#2a2a2a', borderRadius:'3px 0 0 3px' }} />
+            <div style={{ position:'absolute', left:-3, top:128, width:3, height:22, background:'#2a2a2a', borderRadius:'3px 0 0 3px' }} />
+
+              {/* Screen */}
               <div style={{
-                flex: 1,
+                width: 240,
+                height: 430,
                 background: '#fff',
-                borderRadius: 14,
+                borderRadius: 30,
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
@@ -388,12 +394,11 @@ export function GroupwareDemo({ onBack }: { onBack: () => void }) {
                   })}
                 </div>
               </div>
+            {/* Home indicator */}
+            <div style={{ height:14, display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <div style={{ width:60, height:4, background:'rgba(255,255,255,0.35)', borderRadius:3 }} />
             </div>
           </div>
-
-          {/* Monitor stand */}
-          <div style={{ width: 20, height: 10, background: '#3a3a3c' }} />
-          <div style={{ width: 80, height: 6, background: '#3a3a3c', borderRadius: '0 0 6px 6px' }} />
         </motion.div>
       </div>
     </div>
