@@ -28,6 +28,36 @@ const BookCafeDemo = dynamic(
   { ssr: false },
 );
 
+const AutoReportDemo = dynamic(
+  () => import('@/components/AutoReportDemo').then((m) => m.AutoReportDemo),
+  { ssr: false },
+);
+
+const ShootingGameDemo = dynamic(
+  () => import('@/components/ShootingGameDemo').then((m) => m.ShootingGameDemo),
+  { ssr: false },
+);
+
+const JanggiDemo = dynamic(
+  () => import('@/components/JanggiDemo').then((m) => m.JanggiDemo),
+  { ssr: false },
+);
+
+const KrxSiteDemo = dynamic(
+  () => import('@/components/KrxSiteDemo').then((m) => m.KrxSiteDemo),
+  { ssr: false },
+);
+
+const KrxDownloadDemo = dynamic(
+  () => import('@/components/KrxDownloadDemo').then((m) => m.KrxDownloadDemo),
+  { ssr: false },
+);
+
+const MyDataApiDemo = dynamic(
+  () => import('@/components/MyDataApiDemo').then((m) => m.MyDataApiDemo),
+  { ssr: false },
+);
+
 /* ═══════════════════════════════════════════════════
    Types
 ═══════════════════════════════════════════════════ */
@@ -1023,7 +1053,13 @@ function ProjectScreen({
   );
 }
 
-function UniversityScreen({ onBack }: { onBack: () => void }) {
+const UNIV_PROJECTS = [
+  { id: 'auto-report', label: '자동신고', dates: '2013', desc: '충격 감지 시 자동 신고 앱' },
+  { id: 'janggi',      label: '장기',     dates: '2014', desc: '서버-클라이언트 장기 게임' },
+  { id: 'shooting',    label: '슈팅게임', dates: '2014', desc: '갤러그 스타일 슈팅 게임' },
+];
+
+function UniversityScreen({ onBack, onProject }: { onBack: () => void; onProject: (id: string) => void }) {
   const gradeColor = (g: string) =>
     g.startsWith('A')
       ? 'text-black/70'
@@ -1051,6 +1087,35 @@ function UniversityScreen({ onBack }: { onBack: () => void }) {
         <p className="text-[0.48rem] tracking-[0.28em] text-black/22 mt-1">
           컴퓨터공학 관련 이수과목
         </p>
+      </motion.div>
+
+      {/* Project cards */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.22, duration: 0.42 }}
+        className="px-6 pb-4 shrink-0"
+      >
+        <p className="text-[0.46rem] tracking-[0.38em] text-black/20 uppercase mb-3">프로젝트</p>
+        <div className="flex gap-3">
+          {UNIV_PROJECTS.map((proj, i) => (
+            <motion.button
+              key={proj.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.28 + i * 0.07, duration: 0.38 }}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => onProject(proj.id)}
+              className="flex-1 text-left rounded-xl border border-black/8 bg-white/70 p-3 cursor-pointer"
+              style={{ minWidth: 0 }}
+            >
+              <p className="text-[0.65rem] font-medium tracking-[0.1em] text-black/60 leading-none mb-1.5">{proj.label}</p>
+              <p className="text-[0.44rem] tracking-[0.12em] text-black/25">{proj.dates}</p>
+              <p className="text-[0.46rem] tracking-[0.06em] text-black/35 mt-1 leading-snug">{proj.desc}</p>
+            </motion.button>
+          ))}
+        </div>
       </motion.div>
 
       {/* Course list */}
@@ -1520,7 +1585,9 @@ export default function Page() {
   // 상태 복원 로직 (UI 버튼 & 브라우저 뒤로가기 공유)
   const applyBack = useCallback(() => {
     setDir(-1);
-    if (project) {
+    if (project && univOpen) {
+      setProject(null);          // univ 프로젝트 → univ 화면으로
+    } else if (project) {
       setProject(null);
     } else if (company) {
       setCompany(null);
@@ -1544,21 +1611,26 @@ export default function Page() {
     history.back(); // popstate 발생 → applyBack 호출
   };
 
-  const screenKey = project
-    ? `project-${project}`
-    : univOpen
-      ? 'university'
-      : company
-        ? `company-${company}`
-        : freelanceItem
-          ? `freelance-${freelanceItem}`
-          : view;
+  const screenKey = project && univOpen
+    ? `univ-project-${project}`
+    : project
+      ? `project-${project}`
+      : univOpen
+        ? 'university'
+        : company
+          ? `company-${company}`
+          : freelanceItem
+            ? `freelance-${freelanceItem}`
+            : view;
 
   const renderScreen = () => {
     if (view === 'home') return <HomeScreen onNav={navigate} />;
 
     if (project && company) {
-      if (project === 'o2') return <BookCafeDemo onBack={goBack} />;
+      if (project === 'o2')  return <BookCafeDemo onBack={goBack} />;
+      if (project === 'c1')  return <MyDataApiDemo onBack={goBack} />;
+      if (project === 'c2')  return <KrxDownloadDemo onBack={goBack} />;
+      if (project === 'c3')  return <KrxSiteDemo onBack={goBack} />;
       const proj = COMPANIES[company].projects.find((p) => p.id === project);
       if (proj)
         return (
@@ -1570,7 +1642,12 @@ export default function Page() {
         );
     }
 
-    if (univOpen) return <UniversityScreen onBack={goBack} />;
+    if (univOpen) {
+      if (project === 'auto-report') return <AutoReportDemo onBack={goBack} />;
+      if (project === 'janggi')      return <JanggiDemo onBack={goBack} />;
+      if (project === 'shooting')    return <ShootingGameDemo onBack={goBack} />;
+      return <UniversityScreen onBack={goBack} onProject={openProject} />;
+    }
 
     if (company)
       return (
