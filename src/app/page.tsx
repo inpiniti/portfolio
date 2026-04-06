@@ -28,6 +28,11 @@ const BookCafeDemo = dynamic(
   { ssr: false },
 );
 
+const LaundryO2ODemo = dynamic(
+  () => import('@/components/LaundryO2ODemo').then((m) => m.LaundryO2ODemo),
+  { ssr: false },
+);
+
 const AutoReportDemo = dynamic(
   () => import('@/components/AutoReportDemo').then((m) => m.AutoReportDemo),
   { ssr: false },
@@ -1749,6 +1754,7 @@ export default function Page() {
     if (project && company) {
       if (project === 'o1')  return <BookCafeDemo onBack={goBack} />;
       if (project === 'o2')  return <BookCafeDemo onBack={goBack} />;
+      if (project === 'o5')  return <LaundryO2ODemo onBack={goBack} />;
       if (project === 'c1')  return <MyDataApiDemo onBack={goBack} />;
       if (project === 'c2')  return <KrxDownloadDemo onBack={goBack} />;
       if (project === 'c3')  return <KrxSiteDemo onBack={goBack} />;
