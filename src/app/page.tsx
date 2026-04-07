@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { ScheduleScreen } from '@/components/ScheduleScreen';
 import {
   animate,
   AnimatePresence,
@@ -28,8 +27,58 @@ const BookCafeDemo = dynamic(
   { ssr: false },
 );
 
+const FlexibleSeatDemo = dynamic(
+  () => import('@/components/FlexibleSeatDemo').then((m) => m.FlexibleSeatDemo),
+  { ssr: false },
+);
+
 const LaundryO2ODemo = dynamic(
   () => import('@/components/LaundryO2ODemo').then((m) => m.LaundryO2ODemo),
+  { ssr: false },
+);
+
+const HanjinApiDemo = dynamic(
+  () => import('@/components/HanjinApiDemo').then((m) => m.HanjinApiDemo),
+  { ssr: false },
+);
+
+const WinsRpaDemo = dynamic(
+  () => import('@/components/WinsRpaDemo').then((m) => m.WinsRpaDemo),
+  { ssr: false },
+);
+
+const SmartManufacturingDemo = dynamic(
+  () => import('@/components/SmartManufacturingDemo').then((m) => m.SmartManufacturingDemo),
+  { ssr: false },
+);
+
+const IoTPortDemo = dynamic(
+  () => import('@/components/IoTPortDemo').then((m) => m.IoTPortDemo),
+  { ssr: false },
+);
+
+const OceanLookDemo = dynamic(
+  () => import('@/components/OceanLookDemo').then((m) => m.OceanLookDemo),
+  { ssr: false },
+);
+
+const MarineDroneDemo = dynamic(
+  () => import('@/components/MarineDroneDemo').then((m) => m.MarineDroneDemo),
+  { ssr: false },
+);
+
+const LogbookDemo = dynamic(
+  () => import('@/components/LogbookDemo').then((m) => m.LogbookDemo),
+  { ssr: false },
+);
+
+const TradersDemo = dynamic(
+  () => import('@/components/TradersDemo').then((m) => m.TradersDemo),
+  { ssr: false },
+);
+
+const GasLinkDemo = dynamic(
+  () => import('@/components/GasLinkDemo').then((m) => m.GasLinkDemo),
   { ssr: false },
 );
 
@@ -85,8 +134,7 @@ type View =
   | 'home'
   | 'career'
   | 'freelance'
-  | 'about'
-  | 'schedule';
+  | 'about';
 
 type CompanyKey = 'onware' | 'cyberi' | 'iocode' | 'ecomarine' | 'grm';
 
@@ -97,7 +145,6 @@ const NAV: { id: View; label: string }[] = [
   { id: 'career', label: '경력' },
   { id: 'freelance', label: '외주' },
   { id: 'about', label: '소개' },
-  { id: 'schedule', label: '스케줄' },
 ];
 
 type TNode = {
@@ -262,13 +309,6 @@ const COMPANIES: Record<CompanyKey, Company> = {
         desc: '금융권 표준 OpenAPI · 암호화 통신',
         documents: DEFAULT_DOCS,
       },
-      {
-        id: 'c7',
-        label: '서버 이전 (서울→부산)',
-        dates: '2021.02 ~ 2021.06',
-        desc: 'Docker · 무중단 서버 물리 이전 · CI/CD 구축',
-        documents: DEFAULT_DOCS,
-      },
     ],
   },
   iocode: {
@@ -291,20 +331,6 @@ const COMPANIES: Record<CompanyKey, Company> = {
         documents: DEFAULT_DOCS,
       },
       {
-        id: 'i5',
-        label: 'IPR PRO 프로세스마이닝',
-        dates: '2021.11 ~ 2021.12',
-        desc: 'Vue · 스트리밍 데이터 처리 화면',
-        documents: DEFAULT_DOCS,
-      },
-      {
-        id: 'i6',
-        label: 'GS인증 품질 업그레이드',
-        dates: '2022.01 ~ 2022.04',
-        desc: 'Vue · IPR 앱 소프트웨어 품질 개선 · GS인증 획득',
-        documents: DEFAULT_DOCS,
-      },
-      {
         id: 'i2',
         label: '스마트제조혁신사업',
         dates: '2022.01 ~ 2023.04',
@@ -316,13 +342,6 @@ const COMPANIES: Record<CompanyKey, Company> = {
         label: 'IoT 항만물류 기술개발',
         dates: '2022.09 ~ 2023.04',
         desc: 'Node · Mobius · oneM2M · 데이터 수집/시각화/알람',
-        documents: DEFAULT_DOCS,
-      },
-      {
-        id: 'i7',
-        label: '셀로니스 프로세스마이닝',
-        dates: '2023.03 ~ 2023.04',
-        desc: 'Celonis EMS · PQL · 삼성증권/야쿠르트/OB맥주',
         documents: DEFAULT_DOCS,
       },
     ],
@@ -1628,7 +1647,6 @@ function SimpleScreen({ view, onBack }: { view: View; onBack: () => void }) {
   const LABELS: Partial<Record<View, string>> = {
     freelance: '외주',
     about: '소개',
-    schedule: '스케줄',
   };
 
   return (
@@ -1753,15 +1771,24 @@ export default function Page() {
 
     if (project && company) {
       if (project === 'o1')  return <BookCafeDemo onBack={goBack} />;
-      if (project === 'o2')  return <BookCafeDemo onBack={goBack} />;
+      if (project === 'o2')  return <FlexibleSeatDemo onBack={goBack} />;
       if (project === 'o5')  return <LaundryO2ODemo onBack={goBack} />;
       if (project === 'c1')  return <MyDataApiDemo onBack={goBack} />;
       if (project === 'c2')  return <KrxDownloadDemo onBack={goBack} />;
       if (project === 'c3')  return <KrxSiteDemo onBack={goBack} />;
       if (project === 'c4')  return <WebPonentChartDemo onBack={goBack} />;
       if (project === 'c5')  return <GroupwareDemo onBack={goBack} />;
+      if (project === 'c6')  return <HanjinApiDemo onBack={goBack} />;
       if (project === 'i3')  return <IprDemo onBack={goBack} />;
-      if (project === 'i5')  return <IprDemo onBack={goBack} />;
+      if (project === 'i4')  return <WinsRpaDemo onBack={goBack} />;
+      if (project === 'i2')  return <SmartManufacturingDemo onBack={goBack} />;
+      if (project === 'i1')  return <IoTPortDemo onBack={goBack} />;
+      if (project === 'e1')  return <OceanLookDemo onBack={goBack} />;
+      if (project === 'e2')  return <MarineDroneDemo onBack={goBack} />;
+      if (project === 'e3')  return <LogbookDemo onBack={goBack} />;
+      if (project === 'e4')  return <TradersDemo onBack={goBack} />;
+      if (project === 'g1')  return <GasLinkDemo onBack={goBack} />;
+      if (project === 'g2')  return <GasLinkDemo onBack={goBack} />;
       const proj = COMPANIES[company].projects.find((p) => p.id === project);
       if (proj)
         return (
@@ -1805,8 +1832,6 @@ export default function Page() {
     }
 
     if (view === 'about') return <AboutScreen onBack={goBack} />;
-
-    if (view === 'schedule') return <ScheduleScreen onBack={goBack} />;
 
     return <SimpleScreen view={view} onBack={goBack} />;
   };
